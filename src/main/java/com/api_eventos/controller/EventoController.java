@@ -23,10 +23,13 @@ public class EventoController {
         return eventoService.criar(eventoRequestDTO);
     }
 
+    @GetMapping
     public List<EventoResponseDTO> listar(){
         return eventoService.listar();
     }
 
+
+    @GetMapping("{id}")
     public EventoResponseDTO buscarPorId(@PathVariable Long id){
         return eventoService.buscarPorId(id);
     }
