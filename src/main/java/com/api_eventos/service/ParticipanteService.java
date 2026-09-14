@@ -16,7 +16,9 @@ public class ParticipanteService {
         this.participanteRepository = participanteRepository;
     }
 
-
+    public List<Participante> listar() {
+        return participanteRepository.findAll();
+    }
 
     public ParticipanteDTO create(ParticipanteDTO dto) {
         if (participanteRepository.existsByEmail(dto.getEmail())) {

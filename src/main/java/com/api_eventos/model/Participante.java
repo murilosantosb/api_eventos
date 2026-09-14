@@ -19,4 +19,6 @@ public class Participante {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+
 }
