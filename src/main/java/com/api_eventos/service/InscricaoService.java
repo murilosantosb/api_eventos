@@ -54,6 +54,17 @@ public class InscricaoService {
         return inscricoes.stream().map(this::toResponseDTO).toList();
     }
 
+    public void cancelar (Long id){
+
+        Inscricao inscricao =inscricaoRepository.findById(id).orElseThrow(()-> new RuntimeException("id não encontrado"));
+
+        Evento evento = eventoRepository.findById(inscricao.getEvento().getId()).orElseThrow(()-> new RuntimeException("Evento não encontrado"));
+
+        evento.setCapacidadeMaxima(evento.getCapacidadeMaxima()+1);
+
+        inscricaoRepository.deleteById(id);
+    }
+
     private InscricaoResponseDTO toResponseDTO (Inscricao inscricao){
         return InscricaoResponseDTO.builder()
                 .id(inscricao.getId())
