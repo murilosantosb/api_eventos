@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,5 +29,10 @@ public class Evento {
 
     @Column(nullable = false)
     private Integer capacidadeMaxima;
+
+    @OneToMany(mappedBy = "evento")
+    private List<Inscricao> inscricoes;
+
+
 
 }
