@@ -1,5 +1,6 @@
 package com.api_eventos.service;
 
+import com.api_eventos.config.RecursoDuplicadoException;
 import com.api_eventos.dto.ParticipanteDTO;
 import com.api_eventos.model.Participante;
 import com.api_eventos.repository.ParticipanteRepository;
@@ -22,7 +23,7 @@ public class ParticipanteService {
 
     public ParticipanteDTO create(ParticipanteDTO dto) {
         if (participanteRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("Já existe um participante com este e-mail.");
+            throw new RecursoDuplicadoException("Já existe um participante com este e-mail.");
         }
 
         Participante participante = new Participante();
