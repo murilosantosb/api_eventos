@@ -46,4 +46,6 @@ public class EventoService {
                 .data(evento.getData())
                 .capacidadeMaxima(evento.getCapacidadeMaxima()).build();
     }
+
+
 }
