@@ -1,5 +1,7 @@
 package com.api_eventos.service;
 
+import com.api_eventos.config.LimiteVagaException;
+import com.api_eventos.config.RecursoNaoEncontradoException;
 import com.api_eventos.dto.EventoResponseDTO;
 import com.api_eventos.dto.InscricaoRequestDTO;
 import com.api_eventos.dto.InscricaoResponseDTO;
@@ -29,33 +31,28 @@ public class InscricaoService {
 
     public InscricaoResponseDTO inscrever(@RequestBody InscricaoRequestDTO inscricaoRequestDTO){
 
-        Evento evento = eventoRepository.findById(inscricaoRequestDTO.eventoId()).orElseThrow(()-> new RuntimeException("Evento não encontrado"));
-        Participante participante = participanteRepository.findById(inscricaoRequestDTO.participanteId()).orElseThrow(() -> new RuntimeException("Participante não encontrado"));
+        Evento evento = eventoRepository.findById(inscricaoRequestDTO.eventoId()).orElseThrow(()-> new RecursoNaoEncontradoException("Evento não encontrado"));
+        Participante participante = participanteRepository.findById(inscricaoRequestDTO.participanteId()).orElseThrow(() -> new RecursoNaoEncontradoException("Participante não encontrado"));
 
         if (evento.getCapacidadeMaxima() < 0) {
-
-            throw new RuntimeException("Capacidade maxima alcançada");
+            throw new LimiteVagaException("Capacidade maxima alcançada");
         }
+
+        evento.setCapacidadeMaxima(evento.getCapacidadeMaxima()-1);
 
         Inscricao inscricao = Inscricao.builder()
                 .evento(evento)
                 .participante(participante)
                 .dataInscricao(inscricaoRequestDTO.dataInscricao()).build();
 
-
         return toResponseDTO(inscricaoRepository.save(inscricao));
-
     }
 
     public List<InscricaoResponseDTO> listar(Long id){
-
-        Evento evento = eventoRepository.findById(id).orElseThrow();
+        Evento evento = eventoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Evento não encontrado."));
         List<Inscricao>inscricoes= inscricaoRepository.findAll().stream().filter(i -> i.getEvento() == evento).toList();
-
         return inscricoes.stream().map(this::toResponseDTO).toList();
     }
-
-
 
     private InscricaoResponseDTO toResponseDTO (Inscricao inscricao){
         return InscricaoResponseDTO.builder()

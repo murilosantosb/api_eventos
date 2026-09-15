@@ -3,6 +3,8 @@ package com.api_eventos.controller;
 import com.api_eventos.dto.EventoRequestDTO;
 import com.api_eventos.dto.EventoResponseDTO;
 import com.api_eventos.service.EventoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,19 +21,18 @@ public class EventoController {
     }
 
     @PostMapping()
-    public EventoResponseDTO criar (@RequestBody EventoRequestDTO eventoRequestDTO){
-        return eventoService.criar(eventoRequestDTO);
+    public ResponseEntity<EventoResponseDTO> criar (@RequestBody EventoRequestDTO eventoRequestDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventoService.criar(eventoRequestDTO));
     }
 
     @GetMapping
-    public List<EventoResponseDTO> listar(){
-        return eventoService.listar();
+    public ResponseEntity<List<EventoResponseDTO>> listar(){
+        return ResponseEntity.ok(eventoService.listar());
     }
 
-
     @GetMapping("{id}")
-    public EventoResponseDTO buscarPorId(@PathVariable Long id){
-        return eventoService.buscarPorId(id);
+    public ResponseEntity<EventoResponseDTO> buscarPorId(@PathVariable Long id){
+        return ResponseEntity.ok(eventoService.buscarPorId(id));
     }
 
 
