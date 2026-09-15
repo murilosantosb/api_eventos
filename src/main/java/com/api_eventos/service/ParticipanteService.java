@@ -1,7 +1,8 @@
 package com.api_eventos.service;
 
 import com.api_eventos.config.RecursoDuplicadoException;
-import com.api_eventos.dto.ParticipanteDTO;
+import com.api_eventos.dto.ParticipanteRequestDTO;
+import com.api_eventos.dto.ParticipanteResponseDTO;
 import com.api_eventos.model.Participante;
 import com.api_eventos.repository.ParticipanteRepository;
 import org.springframework.stereotype.Service;
@@ -17,26 +18,26 @@ public class ParticipanteService {
         this.participanteRepository = participanteRepository;
     }
 
-    public List<Participante> listar() {
-        return participanteRepository.findAll();
+    public List<ParticipanteResponseDTO> listar() {
+        return participanteRepository.findAll().stream().map(this::toResponse).toList();
     }
 
-    public ParticipanteDTO create(ParticipanteDTO dto) {
-        if (participanteRepository.existsByEmail(dto.getEmail())) {
+    public ParticipanteResponseDTO create(ParticipanteRequestDTO dto) {
+        if (participanteRepository.existsByEmail(dto.email())) {
             throw new RecursoDuplicadoException("Já existe um participante com este e-mail.");
         }
 
         Participante participante = new Participante();
-        participante.setNome(dto.getNome());
-        participante.setEmail(dto.getEmail());
+        participante.setNome(dto.nome());
+        participante.setEmail(dto.email());
 
         Participante savedParticipante = participanteRepository.save(participante);
 
         return toResponse(savedParticipante);
     }
 
-    private ParticipanteDTO toResponse(Participante participante) {
-        return ParticipanteDTO.builder()
+    private ParticipanteResponseDTO toResponse(Participante participante) {
+        return ParticipanteResponseDTO.builder()
                 .id(participante.getId())
                 .nome(participante.getNome())
                 .email(participante.getEmail())

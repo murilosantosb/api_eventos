@@ -1,6 +1,7 @@
 package com.api_eventos.service;
 
 import com.api_eventos.config.LimiteVagaException;
+import com.api_eventos.config.RecursoDuplicadoException;
 import com.api_eventos.config.RecursoNaoEncontradoException;
 import com.api_eventos.dto.EventoResponseDTO;
 import com.api_eventos.dto.InscricaoRequestDTO;
@@ -37,6 +38,11 @@ public class InscricaoService {
         if (evento.getCapacidadeMaxima() < 0) {
             throw new LimiteVagaException("Capacidade maxima alcançada");
         }
+
+        if ( participante.getInscricoes().stream().anyMatch(idInscricao-> idInscricao.getEvento().getId().equals(evento.getId()))){
+            throw new RecursoDuplicadoException("Inscrição duplicada");
+        }
+
 
         evento.setCapacidadeMaxima(evento.getCapacidadeMaxima()-1);
 
