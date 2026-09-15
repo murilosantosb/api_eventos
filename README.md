@@ -60,7 +60,7 @@ Após iniciar a aplicação, você pode acessar a documentação interativa do S
 
 ### Inscrições (`/inscricoes`)
 - `POST /inscricoes` - Realiza a inscrição de um participante em um evento.
-- `GET /inscricoes/pessoas/{id}` - Lista todas as inscrições de um participante específico.
+- `GET /inscricoes/pessoas/{id}` - Lista os participantes inscritos em um evento específico.
 
 ## 🏗️ Arquitetura
 
