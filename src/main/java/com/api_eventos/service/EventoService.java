@@ -1,5 +1,6 @@
 package com.api_eventos.service;
 
+import com.api_eventos.config.RecursoNaoEncontradoException;
 import com.api_eventos.dto.EventoRequestDTO;
 import com.api_eventos.dto.EventoResponseDTO;
 import com.api_eventos.model.Evento;
@@ -35,7 +36,7 @@ public class EventoService {
     }
 
     public EventoResponseDTO buscarPorId(Long id){
-        return  toResponseDTO(eventoRepository.findById(id).orElseThrow(()-> new RuntimeException("Usuário não encontrado")));
+        return  toResponseDTO(eventoRepository.findById(id).orElseThrow(()-> new RecursoNaoEncontradoException("Usuário não encontrado")));
     }
 
     private EventoResponseDTO toResponseDTO (Evento evento){

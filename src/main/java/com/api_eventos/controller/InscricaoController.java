@@ -3,6 +3,8 @@ package com.api_eventos.controller;
 import com.api_eventos.dto.InscricaoRequestDTO;
 import com.api_eventos.dto.InscricaoResponseDTO;
 import com.api_eventos.service.InscricaoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,14 +20,13 @@ public class InscricaoController {
     }
 
     @PostMapping
-    public InscricaoResponseDTO inscrever (@RequestBody InscricaoRequestDTO inscricaoRequestDTO){
-        return inscricaoService.inscrever(inscricaoRequestDTO);
+    public ResponseEntity<InscricaoResponseDTO> inscrever (@RequestBody InscricaoRequestDTO inscricaoRequestDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(inscricaoService.inscrever(inscricaoRequestDTO));
     }
 
     @GetMapping("pessoas/{id}")
-    public List<InscricaoResponseDTO> listar(@PathVariable Long id) {
-        return inscricaoService.listar(id);
+    public ResponseEntity<List<InscricaoResponseDTO>> listar(@PathVariable Long id) {
+        return ResponseEntity.ok(inscricaoService.listar(id));
     }
-
 
 }
