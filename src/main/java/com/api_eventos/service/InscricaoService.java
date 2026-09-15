@@ -1,6 +1,7 @@
 package com.api_eventos.service;
 
 import com.api_eventos.config.LimiteVagaException;
+import com.api_eventos.config.RecursoDuplicadoException;
 import com.api_eventos.config.RecursoNaoEncontradoException;
 import com.api_eventos.dto.EventoResponseDTO;
 import com.api_eventos.dto.InscricaoRequestDTO;
@@ -38,6 +39,11 @@ public class InscricaoService {
             throw new LimiteVagaException("Capacidade maxima alcançada");
         }
 
+        if ( participante.getInscricoes().stream().anyMatch(idInscricao-> idInscricao.getEvento().getId().equals(evento.getId()))){
+            throw new RecursoDuplicadoException("Inscrição duplicada");
+        }
+
+
         evento.setCapacidadeMaxima(evento.getCapacidadeMaxima()-1);
 
         Inscricao inscricao = Inscricao.builder()
@@ -52,6 +58,17 @@ public class InscricaoService {
         Evento evento = eventoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Evento não encontrado."));
         List<Inscricao>inscricoes= inscricaoRepository.findAll().stream().filter(i -> i.getEvento() == evento).toList();
         return inscricoes.stream().map(this::toResponseDTO).toList();
+    }
+
+    public void cancelar (Long id){
+
+        Inscricao inscricao =inscricaoRepository.findById(id).orElseThrow(()-> new RuntimeException("id não encontrado"));
+
+        Evento evento = eventoRepository.findById(inscricao.getEvento().getId()).orElseThrow(()-> new RuntimeException("Evento não encontrado"));
+
+        evento.setCapacidadeMaxima(evento.getCapacidadeMaxima()+1);
+
+        inscricaoRepository.deleteById(id);
     }
 
     private InscricaoResponseDTO toResponseDTO (Inscricao inscricao){

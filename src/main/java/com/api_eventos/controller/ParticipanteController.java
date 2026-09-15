@@ -1,6 +1,7 @@
 package com.api_eventos.controller;
 
-import com.api_eventos.dto.ParticipanteDTO;
+import com.api_eventos.dto.ParticipanteRequestDTO;
+import com.api_eventos.dto.ParticipanteResponseDTO;
 import com.api_eventos.model.Participante;
 import com.api_eventos.service.ParticipanteService;
 import org.springframework.http.HttpStatus;
@@ -20,13 +21,13 @@ public class ParticipanteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Participante>> listar() {
+    public ResponseEntity<List<ParticipanteResponseDTO>> listar() {
         return ResponseEntity.ok(participanteService.listar());
     }
 
     @PostMapping
-    public ResponseEntity<ParticipanteDTO> create(@RequestBody ParticipanteDTO dto) {
-            ParticipanteDTO saved = participanteService.create(dto);
+    public ResponseEntity<ParticipanteResponseDTO> create(@RequestBody ParticipanteRequestDTO dto) {
+            ParticipanteResponseDTO saved = participanteService.create(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 }

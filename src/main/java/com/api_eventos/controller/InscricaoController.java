@@ -29,4 +29,10 @@ public class InscricaoController {
         return ResponseEntity.ok(inscricaoService.listar(id));
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> cancelar(@PathVariable Long id){
+        inscricaoService.cancelar(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
